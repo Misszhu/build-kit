@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -7,6 +8,12 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'), // 源 html 路径
+      filename: 'index.html' // 输出到 dist 目录
+    })
+  ],
   module: {
     rules: [
       {
@@ -18,6 +25,15 @@ module.exports = {
               prefix: '// 这是自定义前缀\n',
               suffix: '\n// 这是自定义后缀'
             }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: path.resolve(__dirname, '../dist/loaders/hash-css-loader.js'),
+            options: { hashLength: 8 }
           }
         ]
       }
